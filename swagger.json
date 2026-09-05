@@ -28,7 +28,21 @@
                   "items": {
                     "type": "object"
                   }
-                }
+                },
+                "example": [
+                  {
+                    "id": "1",
+                    "title": "The Great Gatsby",
+                    "author": "F. Scott Fitzgerald",
+                    "publishedYear": 1925
+                  },
+                  {
+                    "id": "2",
+                    "title": "To Kill a Mockingbird",
+                    "author": "Harper Lee",
+                    "publishedYear": 1960
+                  }
+                ]
               }
             }
           },
@@ -75,6 +89,12 @@
               "application/json": {
                 "schema": {
                   "type": "object"
+                },
+                "example": {
+                  "id": "1",
+                  "title": "The Great Gatsby",
+                  "author": "F. Scott Fitzgerald",
+                  "publishedYear": 1925
                 }
               }
             }

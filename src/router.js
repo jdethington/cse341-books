@@ -19,6 +19,15 @@ const router = express.Router();
  *               type: array
  *               items:
  *                 type: object
+ *             example:
+ *               - id: "1"
+ *                 title: The Great Gatsby
+ *                 author: F. Scott Fitzgerald
+ *                 publishedYear: 1925
+ *               - id: "2"
+ *                 title: To Kill a Mockingbird
+ *                 author: Harper Lee
+ *                 publishedYear: 1960
  *       500:
  *         description: Internal server error
  *         content:
@@ -53,6 +62,11 @@ router.get("/books", getBooksHandler);
  *           application/json:
  *             schema:
  *               type: object
+ *             example:
+ *               id: "1"
+ *               title: The Great Gatsby
+ *               author: F. Scott Fitzgerald
+ *               publishedYear: 1925
  *       404:
  *         description: Book not found
  *         content:
