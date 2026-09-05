@@ -1,0 +1,37 @@
+# Week 01 Reflection
+
+1. Include a link to one of your Pull Requests (PRs) at GitHub. (It should be merged and closed at this point.)
+
+GitHub Pull Request Link: https://github.com/jdethington/cse341-books/pull/6
+
+2. Include a link to one of your Issues at GitHub. (It should be closed at this point.)
+
+GitHub Issue Link: https://github.com/jdethington/cse341-books/issues/3
+
+3. Which issue took more or less time than expected? Why?
+
+Answer: The issue that took more time then I expected was issue 4, "Deploy and test the application".  I was expecting to see no issues on render.  I forgot about the outbound IP addresses.  It took me awhile to figure out where to find the addresses.  Once I did find them, it was a quick process to add them to mongobd.com.  Now the site on render works like expected.
+
+4. Include a link to your walk-though video. (It must include your name, show your web service working at Render, explain the way your `Get Single Book` controller works, and discuss status codes.):
+
+Video link: https://youtu.be/ADz6bSykGdg 
+
+5.a. Include a GitHub link to a file that shows how your app uses sensitive data, such as the MongoDB connection string.
+
+GitHub link: https://github.com/jdethington/cse341-books/blob/main/src/db/connect.js	
+
+5.b. How did you store sensitive data? Why is that approach important?
+
+Answer: Sensitive data like the MongoDB connecting string is stored in the .env file.  The .env is in the .gitignore file that GitHub uses to know which files to not save to the repository.  This keeps sensitive data from being freely available to anyone that can access the repository.
+
+6.a. Include a GitHub link to a file that shows one other implementation decision you made.
+
+GitHub link: https://github.com/jdethington/cse341-books/blob/main/src/models/books.js
+
+6.b. What decision does this file show, and why did you make that choice?
+
+Answer: In this file, lines 4 and 9, use a single line of code to retrieve information from the database.  I could have separated each step into a different line.  I decided that using one line is easier to read and cleaner.
+
+7. What is one specific habit or process you will work on for next week?
+
+Answer: I will work to improve my ability to write a spec sheet.  This week's assignment was a great example of how to write a version 1 spec sheet.  Then ask questions to improve it.  Finally, rewrite the spec sheet to be more clear for anyone to follow.
