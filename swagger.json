@@ -31,16 +31,25 @@
                 },
                 "example": [
                   {
-                    "id": "1",
-                    "title": "The Great Gatsby",
-                    "author": "F. Scott Fitzgerald",
-                    "publishedYear": 1925
+                    "_id": "6a95dfd0bee3f15d281b111a",
+                    "id": "b1",
+                    "author": "George Orwell",
+                    "title": "1984",
+                    "publicationDate": "1948-06-08"
                   },
                   {
-                    "id": "2",
-                    "title": "To Kill a Mockingbird",
-                    "author": "Harper Lee",
-                    "publishedYear": 1960
+                    "_id": "6a95e04bbee3f15d281b111c",
+                    "id": "b2",
+                    "author": "J.K. Rowling",
+                    "title": "Harry Potter and the Philosopher's Stone",
+                    "publicationDate": "1997-06-26"
+                  },
+                  {
+                    "_id": "6a95e066bee3f15d281b111d",
+                    "id": "b3",
+                    "author": "J.R.R. Tolkien",
+                    "title": "The Hobbit",
+                    "publicationDate": "1937-09-21"
                   }
                 ]
               }
@@ -91,10 +100,11 @@
                   "type": "object"
                 },
                 "example": {
-                  "id": "1",
-                  "title": "The Great Gatsby",
-                  "author": "F. Scott Fitzgerald",
-                  "publishedYear": 1925
+                  "_id\"": "6a95e066bee3f15d281b111d",
+                  "id": "b3",
+                  "author": "J.R.R. Tolkien",
+                  "title": "The Hobbit",
+                  "publicationDate": "1937-09-21"
                 }
               }
             }
