@@ -6,6 +6,7 @@ import {
   deleteAuthor as deleteAuthorFromDb,
   authorHasBooks as authorHasBooksFromDb,
 } from "../models/authors.js";
+
 // GET /authors
 const getAllAuthors = async (req, res) => {
   try {
@@ -15,6 +16,7 @@ const getAllAuthors = async (req, res) => {
     return res.status(500).json({ error: "Unable to retrieve authors" });
   }
 };
+
 // GET /authors/:id
 const getAuthorById = async (req, res) => {
   try {
@@ -28,6 +30,7 @@ const getAuthorById = async (req, res) => {
     return res.status(500).json({ error: "Unable to retrieve author" });
   }
 };
+
 // POST /authors
 const createAuthor = async (req, res) => {
   try {
@@ -60,6 +63,7 @@ const createAuthor = async (req, res) => {
     return res.status(500).json({ error: "Unable to create author" });
   }
 };
+
 // PUT /authors/:id
 const updateAuthor = async (req, res) => {
   try {
@@ -91,6 +95,7 @@ const updateAuthor = async (req, res) => {
     return res.status(500).json({ error: "Unable to update author" });
   }
 };
+
 // DELETE /authors/:id
 const deleteAuthor = async (req, res) => {
   try {
