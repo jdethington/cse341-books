@@ -1,5 +1,12 @@
 import express from "express";
 import { getBooksHandler, getBookByIdHandler } from "./controllers/books.js";
+import {
+  getAllAuthors,
+  getAuthorById,
+  createAuthor,
+  updateAuthor,
+  deleteAuthor,
+} from "./controllers/authors.js";
 
 const router = express.Router();
 
@@ -70,7 +77,7 @@ router.get("/books", getBooksHandler);
  *             schema:
  *               type: object
  *             example:
- *               _id": 6a95e066bee3f15d281b111d
+ *               _id: 6a95e066bee3f15d281b111d
  *               id: "b3"
  *               author: J.R.R. Tolkien
  *               title: The Hobbit
@@ -83,7 +90,7 @@ router.get("/books", getBooksHandler);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
+ *                 error:
  *                   type: string
  *                   example: Book not found
  *       500:
@@ -98,4 +105,315 @@ router.get("/books", getBooksHandler);
  *                   example: Internal Server Error
  */
 router.get("/books/:id", getBookByIdHandler);
+
+/**
+ * @swagger
+ * /authors:
+ *   get:
+ *     summary: Get all authors
+ *     tags:
+ *       - Authors
+ *     responses:
+ *       200:
+ *         description: A list of authors
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *             example:
+ *               - _id: 6a95dfd0bee3f15d281b111a
+ *                 id: "a1"
+ *                 firstName: George
+ *                 lastName: Orwell
+ *                 birthYear: 1903
+ *               - _id: 6a95e04bbee3f15d281b111c
+ *                 id: "a2"
+ *                 firstName: J.K.
+ *                 lastName: Rowling
+ *                 birthYear: 1965
+ *               - _id: 6a95e066bee3f15d281b111d
+ *                 id: "a3"
+ *                 firstName: J.R.R.
+ *                 lastName: Tolkien
+ *                 birthYear: 1892
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Unable to retrieve authors
+ */
+router.get("/authors", getAllAuthors);
+
+/**
+ * @swagger
+ * /authors/{id}:
+ *   get:
+ *     summary: Get an author by ID
+ *     tags:
+ *       - Authors
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the author to retrieve
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: The requested author
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *             example:
+ *               _id: 6a95dfd0bee3f15d281b111a
+ *               id: "a1"
+ *               firstName: George
+ *               lastName: Orwell
+ *               birthYear: 1903
+ *
+ *       404:
+ *         description: Author not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Author not found
+ *
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Unable to retrieve author
+ */
+router.get("/authors/:id", getAuthorById);
+
+/**
+ * @swagger
+ * /authors:
+ *   post:
+ *     summary: Create a new author
+ *     tags:
+ *       - Authors
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *               - firstName
+ *               - lastName
+ *               - birthYear
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: The unique identifier for the author
+ *               firstName:
+ *                 type: string
+ *                 description: The author's first name
+ *               lastName:
+ *                 type: string
+ *                 description: The author's last name
+ *               birthYear:
+ *                 type: integer
+ *                 description: The author's birth year
+ *             example:
+ *               id: "a4"
+ *               firstName: Stephen
+ *               lastName: King
+ *               birthYear: 1947
+ *     responses:
+ *       201:
+ *         description: The created author
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *             example:
+ *               id: "a4"
+ *               firstName: Stephen
+ *               lastName: King
+ *               birthYear: 1947
+ *       400:
+ *         description: Missing required field or duplicate author ID
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Missing required fields. id, firstName, lastName, and birthYear are required.
+ *             examples:
+ *               missingField:
+ *                 summary: Missing required field
+ *                 value:
+ *                   error: Missing required fields. id, firstName, lastName, and birthYear are required.
+ *               duplicateId:
+ *                 summary: Duplicate author ID
+ *                 value:
+ *                   error: Author with this ID already exists.
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Unable to create author
+ */
+router.post("/authors", createAuthor);
+
+/**
+ * @swagger
+ * /authors/{id}:
+ *   put:
+ *     summary: Update an existing author
+ *     tags:
+ *       - Authors
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The unique identifier for the author
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - firstName
+ *               - lastName
+ *               - birthYear
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *                 description: The author's updated first name
+ *               lastName:
+ *                 type: string
+ *                 description: The author's updated last name
+ *               birthYear:
+ *                 type: integer
+ *                 description: The author's updated birth year
+ *             example:
+ *               firstName: Updated First Name
+ *               lastName: Updated Last Name
+ *               birthYear: 1947
+ *     responses:
+ *       200:
+ *         description: The updated author
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *             example:
+ *               id: "a4"
+ *               firstName: Updated First Name
+ *               lastName: Updated Last Name
+ *               birthYear: 1947
+ *       400:
+ *         description: Missing required field
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Missing required fields. firstName, lastName, and birthYear are required.
+ *       404:
+ *         description: Author not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Author not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Unable to update author
+ */
+router.put("/authors/:id", updateAuthor);
+
+/**
+ *  @swagger
+ *  /authors/{id}:
+ *    delete:
+ *      summary: Delete an existing author
+ *      tags:
+ *        - Authors
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          required: true
+ *          description: The ID of the author to delete
+ *          schema:
+ *            type: string
+ *      responses:
+ *        204:
+ *          description: Author successfully deleted
+ *        404:
+ *          description: Author not found
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  error:
+ *                    type: string
+ *                    example: Author not found.
+ *        409:
+ *          description: Author cannot be deleted because the author still has books
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  error:
+ *                    type: string
+ *                    example: Author cannot be deleted because the author still has books.
+ *        500:
+ *          description: Internal server error
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  error:
+ *                    type: string
+ *                    example: Unable to delete author.
+ */
+router.delete("/authors/:id", deleteAuthor);
+
 export default router;
