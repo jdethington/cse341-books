@@ -1,5 +1,11 @@
 import express from "express";
-import { getBooksHandler, getBookByIdHandler } from "./controllers/books.js";
+import {
+  getBooksHandler,
+  getBookByIdHandler,
+  createBookHandler,
+  updateBookHandler,
+  deleteBookHandler,
+} from "./controllers/books.js";
 import {
   getAllAuthors,
   getAuthorById,
@@ -27,19 +33,16 @@ const router = express.Router();
  *               items:
  *                 type: object
  *             example:
- *               - _id: 6a95dfd0bee3f15d281b111a
- *                 id: "b1"
- *                 author: George Orwell
+ *               - id: "b1"
+ *                 authorId: "a1"
  *                 title: 1984
  *                 publicationDate: 1948-06-08
- *               - _id: 6a95e04bbee3f15d281b111c
- *                 id: "b2"
- *                 author: J.K. Rowling
+ *               - id: "b2"
+ *                 authorId: "a2"
  *                 title: Harry Potter and the Philosopher's Stone
  *                 publicationDate: 1997-06-26
- *               - _id: 6a95e066bee3f15d281b111d
- *                 id: "b3"
- *                 author: J.R.R. Tolkien
+ *               - id: "b3"
+ *                 authorId: "a3"
  *                 title: The Hobbit
  *                 publicationDate: 1937-09-21
  *       500:
@@ -49,9 +52,9 @@ const router = express.Router();
  *             schema:
  *               type: object
  *               properties:
- *                 message:
+ *                 error:
  *                   type: string
- *                   example: Internal Server Error
+ *                   example: Unable to retrieve books
  */
 router.get("/books", getBooksHandler);
 
@@ -77,12 +80,10 @@ router.get("/books", getBooksHandler);
  *             schema:
  *               type: object
  *             example:
- *               _id: 6a95e066bee3f15d281b111d
  *               id: "b3"
- *               author: J.R.R. Tolkien
+ *               authorId: "a3"
  *               title: The Hobbit
  *               publicationDate: 1937-09-21
- *
  *       404:
  *         description: Book not found
  *         content:
@@ -100,11 +101,162 @@ router.get("/books", getBooksHandler);
  *             schema:
  *               type: object
  *               properties:
- *                 message:
+ *                 error:
  *                   type: string
- *                   example: Internal Server Error
+ *                   example: Unable to retrieve book
  */
 router.get("/books/:id", getBookByIdHandler);
+
+/**
+ * @swagger
+ * /books:
+ *   post:
+ *     summary: Create a new book
+ *     tags:
+ *       - Books
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *               - authorId
+ *               - title
+ *               - publicationDate
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: The ID of the book
+ *               authorId:
+ *                 type: string
+ *                 description: The ID of the author
+ *               title:
+ *                 type: string
+ *                 description: The title of the book
+ *               publicationDate:
+ *                 type: string
+ *                 format: date
+ *                 description: The publication date of the book
+ *             example:
+ *               id: "b3"
+ *               authorId: "a3"
+ *               title: The Hobbit
+ *               publicationDate: 1937-09-21
+ *     responses:
+ *       201:
+ *         description: The created book
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *             example:
+ *               id: "b3"
+ *               authorId: "a3"
+ *               title: The Hobbit
+ *               publicationDate: 1937-09-21
+ */
+router.post("/books", createBookHandler);
+
+/**
+ * @swagger
+ * /books/{id}:
+ *   put:
+ *     summary: Update an existing book
+ *     tags:
+ *       - Books
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the book to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - authorId
+ *               - publicationDate
+ *             properties:
+ *               authorId:
+ *                 type: string
+ *                 description: The ID of the author
+ *               title:
+ *                 type: string
+ *                 description: The title of the book
+ *               publicationDate:
+ *                 type: string
+ *                 format: date
+ *                 description: The publication date of the book
+ *             example:
+ *               authorId: "a3"
+ *               title: The Hobbit
+ *               publicationDate: 1937-09-21
+ *     responses:
+ *       200:
+ *         description: The updated book
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 authorId:
+ *                   type: string
+ *                 title:
+ *                   type: string
+ *                 publicationDate:
+ *                   type: string
+ *                   format: date
+ */
+router.put("/books/:id", updateBookHandler);
+
+/**
+ * @swagger
+ * /books/{id}:
+ *   delete:
+ *     summary: Delete an existing book
+ *     tags:
+ *       - Books
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the book to delete
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: No content
+ *       404:
+ *         description: Book not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Book not found
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Unable to delete book
+ */
+router.delete("/books/:id", deleteBookHandler);
 
 /**
  * @swagger
@@ -123,18 +275,15 @@ router.get("/books/:id", getBookByIdHandler);
  *               items:
  *                 type: object
  *             example:
- *               - _id: 6a95dfd0bee3f15d281b111a
- *                 id: "a1"
+ *               - id: "a1"
  *                 firstName: George
  *                 lastName: Orwell
  *                 birthYear: 1903
- *               - _id: 6a95e04bbee3f15d281b111c
- *                 id: "a2"
+ *               - id: "a2"
  *                 firstName: J.K.
  *                 lastName: Rowling
  *                 birthYear: 1965
- *               - _id: 6a95e066bee3f15d281b111d
- *                 id: "a3"
+ *               - id: "a3"
  *                 firstName: J.R.R.
  *                 lastName: Tolkien
  *                 birthYear: 1892
@@ -173,7 +322,6 @@ router.get("/authors", getAllAuthors);
  *             schema:
  *               type: object
  *             example:
- *               _id: 6a95dfd0bee3f15d281b111a
  *               id: "a1"
  *               firstName: George
  *               lastName: Orwell
